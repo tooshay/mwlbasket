@@ -18,6 +18,6 @@ class ItemsRepository
     {
         $item = app(Item::class);
 
-        return $item->removed()->all();
+        return $item->removed()->get();
     }
 }
