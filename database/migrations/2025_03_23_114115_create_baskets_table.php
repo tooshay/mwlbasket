@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('baskets', function (Blueprint $table) {
             $table->id();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('total_amount')->unsigned();
             $table->timestamps();
         });
     }
