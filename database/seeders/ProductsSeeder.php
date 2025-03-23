@@ -13,7 +13,7 @@ class ProductsSeeder extends Seeder
      */
     public function run(): void
     {
-        $path = database_path('seeders/fixtures/products.json');
+        $path = database_path('fixtures/products.json');
 
         if (!File::exists($path)) {
             $this->command->warn("Products file not found. Skipping seed.");
@@ -33,7 +33,7 @@ class ProductsSeeder extends Seeder
         foreach ($products as $product) {
             DB::table('products')->updateOrInsert(
                 ['name' => $product['name']],
-                ['price' => $product['price']]
+                ['price' =>  (int) round($product['price'] * 100)]
             );
         }
 

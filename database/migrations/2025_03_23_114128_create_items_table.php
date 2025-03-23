@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->foreign('basket_id')->references('id')->on('baskets')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreignId('basket_id')->references('id')->on('baskets')->onDelete('cascade');
+            $table->foreignId('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->integer('quantity');
             $table->integer('price');
             $table->string('status')->default(ItemStatus::ADDED->value);
