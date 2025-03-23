@@ -12,6 +12,8 @@ class CheckoutAction
     public function execute(): Collection
     {
         $basket = auth()->user()->currentBasket();
+        $basket->checked_out_at ??= now();
+        $basket->save();
 
         $basket->items()->update([
             'status' => ItemStatus::PURCHASED->value,

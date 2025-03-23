@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('basket_id')->references('id')->on('baskets')->onDelete('cascade');
             $table->foreignId('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->integer('quantity');
-            $table->integer('price');
+            $table->integer('quantity')->default(0);
+            $table->integer('price')->default(0);
             $table->string('status')->default(ItemStatus::ADDED->value);
             $table->timestamps();
         });

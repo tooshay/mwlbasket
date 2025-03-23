@@ -11,6 +11,7 @@
 |
 */
 
+use App\Models\Basket;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
@@ -57,9 +58,18 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function createAuthedUser()
+function createAuthedUser(): void
 {
     $user = User::factory()->create();
+
+    auth()->guard()->setUser($user);
+}
+
+function createAuthedUserWithFullBasket(): void
+{
+    $user = User::factory()->create();
+
+    Basket::factory()->create(['user_id' => $user->id]);
 
     auth()->guard()->setUser($user);
 }

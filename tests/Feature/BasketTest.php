@@ -7,7 +7,7 @@ it('returns a successful response', function () {
 });
 
 it('returns return items for an existing basket', function () {
-    createAuthedUser();
+    createAuthedUserWithFullBasket();
 
     $response = $this->json('GET', route('basket.get'));
 
