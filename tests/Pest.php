@@ -11,9 +11,25 @@
 |
 */
 
+use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
+
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
+
+uses()->beforeEach(function (): void {
+    Artisan::call('migrate:fresh');
+    Artisan::call('db:seed');
+
+    Mail::fake();
+    Notification::fake();
+    Queue::fake();
+})->in(
+    'Feature',
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +57,9 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function createAuthedUser()
 {
-    // ..
+    $user = User::factory()->create();
+
+    auth()->guard()->setUser($user);
 }

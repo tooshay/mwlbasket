@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('baskets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('total_amount')->unsigned();
+            $table->integer('total_amount')->default(0)->unsigned();
             $table->dateTime('checked_out_at')->nullable();
             $table->timestamps();
         });

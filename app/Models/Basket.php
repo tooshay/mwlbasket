@@ -13,6 +13,8 @@ class Basket extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['checked_out_at'];
+
     public function items(): HasMany
     {
         return $this->hasMany(Item::class);
