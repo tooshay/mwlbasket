@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BasketResource extends JsonResource
+class ItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +15,9 @@ class BasketResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'items' => ItemResource::collection($this->items),
-            'total_amount' => $this->total_amount,
+            'quantity' => $this->name,
+            'added' => $this->created_at,
+            'product' => ProductResource::make($this->whenLoaded('product')),
         ];
     }
 }
