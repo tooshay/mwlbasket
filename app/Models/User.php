@@ -51,4 +51,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Basket::class);
     }
+
+    public function currentBasket(): Basket
+    {
+        return $this->baskets()
+            ->whereNull('checked_out_at')
+            ->firstOrCreate([], ['checked_out_at' => null]);
+    }
 }

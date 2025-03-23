@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('total_amount')->unsigned();
+            $table->dateTime('checked_out_at')->nullable();
             $table->timestamps();
         });
     }
