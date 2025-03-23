@@ -9,6 +9,7 @@ use App\Actions\CheckoutAction;
 use App\Actions\RemoveItemAction;
 use App\Enums\ItemStatus;
 use App\Http\Requests\ManipulateItemRequest;
+use App\Http\Resources\BasketResource;
 use App\Repositories\ItemsRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -29,24 +30,24 @@ class BasketController extends Controller
     public function checkout(CheckoutAction $checkoutAction): JsonResponse
     {
         try {
-            $checkoutAction->execute();
+            $basket = $checkoutAction->execute();
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
 
-        return response()->json(['message' => 'Checkout successful']);
+        return response()->json(
+            [
+                'message' => sprintf('Checkout successful for basket %s', $basket->id)
+            ]
+        );
     }
 
-    public function get(): JsonResponse
+    public function get(): BasketResource|JsonResponse
     {
         try {
             $basket = auth()->user()->currentBasket()->load('items.product');
 
-            return response()->json([
-                'basket_id' => $basket->id,
-                'items' => $basket->items,
-                'total_value' => $basket->items->where('status', ItemStatus::ADDED->value)->sum(fn ($item) => $item->product->price),
-            ]);
+            return new BasketResource($basket);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
