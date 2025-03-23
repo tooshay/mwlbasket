@@ -15,8 +15,8 @@ class ProductsSeeder extends Seeder
     {
         $path = database_path('fixtures/products.json');
 
-        if (!File::exists($path)) {
-            $this->command->warn("Products file not found. Skipping seed.");
+        if (! File::exists($path)) {
+            $this->command->warn('Products file not found. Skipping seed.');
 
             return;
         }
@@ -24,8 +24,8 @@ class ProductsSeeder extends Seeder
         $json = File::get($path);
         $products = json_decode($json, true);
 
-        if (json_last_error() !== JSON_ERROR_NONE || !is_array($products)) {
-            $this->command->error("Failed to decode products.json: " . json_last_error_msg());
+        if (json_last_error() !== JSON_ERROR_NONE || ! is_array($products)) {
+            $this->command->error('Failed to decode products.json: '.json_last_error_msg());
 
             return;
         }
@@ -33,7 +33,7 @@ class ProductsSeeder extends Seeder
         foreach ($products as $product) {
             DB::table('products')->updateOrInsert(
                 ['name' => $product['name']],
-                ['price' =>  (int) round($product['price'] * 100)]
+                ['price' => (int) round($product['price'] * 100)]
             );
         }
 

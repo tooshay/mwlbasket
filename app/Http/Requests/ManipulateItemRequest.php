@@ -24,7 +24,7 @@ class ManipulateItemRequest extends FormRequest
         return [
             'product_id' => [
                 'required',
-                'exists:products,id'
+                'exists:products,id',
             ],
         ];
     }
