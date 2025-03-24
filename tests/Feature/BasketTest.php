@@ -59,7 +59,7 @@ it('checks out the basket and updates all item statuses to purchased', function 
 
     $response = $this
         ->actingAs($user)
-        ->postJson(route('basket.checkout'));
+        ->json('POST', route('basket.checkout'));
 
     $response->assertOk();
     $response->assertJsonFragment([
@@ -98,3 +98,39 @@ it('removes an item from a user\'s basket', function () {
 
     expect($item->fresh()->status)->toBe(ItemStatus::REMOVED->value);
 });
+
+it('returns only removed items', function () {
+    $user = User::factory()->create();
+    $basket = Basket::factory()->for($user)->create();
+    $product1 = Product::first();
+    $product2 = Product::find(2);
+
+    // Add one removed and one added item
+    $removedItem = $basket->items()->create([
+        'product_id' => $product1->id,
+        'status' => ItemStatus::REMOVED->value,
+    ]);
+
+    $addedItem = $basket->items()->create([
+        'product_id' => $product2->id,
+        'status' => ItemStatus::ADDED->value,
+    ]);
+
+    $response = $this
+        ->actingAs($user)
+        ->getJson(route('basket.items.removed'));
+
+    $response->assertOk();
+
+    $response->assertJson(fn (AssertableJson $json) =>
+        $json->has('data', 1)
+            ->has('data.0', fn ($json) =>
+            $json
+                ->where('id', $removedItem->id)
+                ->where('status', ItemStatus::REMOVED->value)
+                ->where('product.id', $product1->id)
+                ->where('product.name', $product1->name)
+                ->etc()
+            )
+        );
+})->only();
