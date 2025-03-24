@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Actions\AddItemAction;
 use App\Actions\CheckoutAction;
 use App\Actions\RemoveItemAction;
-use App\Enums\ItemStatus;
 use App\Http\Requests\ManipulateItemRequest;
 use App\Http\Resources\BasketResource;
 use App\Repositories\ItemsRepository;
@@ -37,7 +36,7 @@ class BasketController extends Controller
 
         return response()->json(
             [
-                'message' => sprintf('Checkout successful for basket %s', $basket->id)
+                'message' => sprintf('Checkout successful for basket %s', $basket->id),
             ]
         );
     }
