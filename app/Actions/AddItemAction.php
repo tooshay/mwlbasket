@@ -13,9 +13,20 @@ class AddItemAction
     {
         $basket = auth()->user()->currentBasket();
 
+        $existingItem = $basket->items()
+            ->where('product_id', $data['product_id'])
+            ->first();
+
+        if ($existingItem) {
+            $existingItem->increment('quantity');
+
+            return $existingItem->fresh();
+        }
+
         return $basket->items()->create([
             'product_id' => $data['product_id'],
             'status' => ItemStatus::ADDED->value,
+            'quantity' => 1,
         ]);
     }
 }

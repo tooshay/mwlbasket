@@ -7,23 +7,26 @@ namespace App\Http\Controllers;
 use App\Actions\AddItemAction;
 use App\Actions\CheckoutAction;
 use App\Actions\RemoveItemAction;
-use App\Http\Requests\ManipulateItemRequest;
+use App\Http\Requests\AddItemRequest;
+use App\Http\Requests\RemoveItemRequest;
 use App\Http\Resources\BasketResource;
+use App\Http\Resources\ItemResource;
+use App\Http\Resources\ItemResourceCollection;
 use App\Repositories\ItemsRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
 class BasketController extends Controller
 {
-    public function addItem(ManipulateItemRequest $request, AddItemAction $addItemAction): JsonResponse
+    public function addItem(AddItemRequest $request, AddItemAction $addItemAction): ItemResource|JsonResponse
     {
         try {
-            $addItemAction->execute($request->validated());
+            $item = $addItemAction->execute($request->validated());
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
 
-        return response()->json(['message' => 'Item added to basket']);
+        return new ItemResource($item);
     }
 
     public function checkout(CheckoutAction $checkoutAction): JsonResponse
@@ -45,30 +48,32 @@ class BasketController extends Controller
     {
         try {
             $basket = auth()->user()->currentBasket()->load('items.product');
-
-            return new BasketResource($basket);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
+
+        return new BasketResource($basket);
     }
 
-    public function removeItem(ManipulateItemRequest $request, RemoveItemAction $removeItemAction): JsonResponse
+    public function removeItem(RemoveItemRequest $request, RemoveItemAction $removeItemAction): ItemResource|JsonResponse
     {
         try {
-            $removeItemAction->execute($request->validated());
+            $item = $removeItemAction->execute($request->validated());
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
 
-        return response()->json(['message' => 'Item removed from basket']);
+        return new ItemResource($item);
     }
 
-    public function removedItems(ItemsRepository $itemsRepository): JsonResponse
+    public function removedItems(ItemsRepository $itemsRepository): ItemResourceCollection|JsonResponse
     {
         try {
-            return response()->json($itemsRepository->findRemoved()->toJson());
+            $items = $itemsRepository->findRemoved();
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
+
+        return new ItemResourceCollection($items);
     }
 }

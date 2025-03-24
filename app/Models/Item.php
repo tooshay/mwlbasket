@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $basket_id
@@ -19,14 +20,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $quantity
  * @property int $price
  * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Basket $basket
- * @property-read \App\Models\Product $product
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Basket $basket
+ * @property-read Product $product
  * @method static \Database\Factories\ItemFactory factory($count = null, $state = [])
  * @method static Builder<static>|Item newModelQuery()
  * @method static Builder<static>|Item newQuery()
- * @method static Builder<static>|Item ofBasket(\App\Models\Basket $basket)
+ * @method static Builder<static>|Item ofBasket(Basket $basket)
  * @method static Builder<static>|Item query()
  * @method static Builder<static>|Item removed()
  * @method static Builder<static>|Item whereBasketId($value)
@@ -45,6 +46,9 @@ class Item extends Model
 
     protected $fillable = [
         'product_id',
+        'price',
+        'status',
+        'quantity'
     ];
 
     public function basket(): BelongsTo

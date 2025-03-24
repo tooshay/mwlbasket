@@ -27,11 +27,10 @@ class BasketFactory extends Factory
         ];
     }
 
-    public function configure(): static
+    public function withItems(int $count = 3): self
     {
-        return $this->afterCreating(function (Basket $basket) {
-            $products = Product::inRandomOrder()->take(fake()->randomNumber(1, 5))->get();
-
+        return $this->afterCreating(function (Basket $basket) use ($count) {
+            $products = Product::inRandomOrder()->take($count)->get();
             $total = 0;
 
             foreach ($products as $product) {
@@ -39,7 +38,6 @@ class BasketFactory extends Factory
                     'product_id' => $product->id,
                     'status' => ItemStatus::ADDED->value,
                 ]);
-
                 $total += $product->price;
             }
 

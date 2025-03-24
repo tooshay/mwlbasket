@@ -1,39 +1,100 @@
 <?php
 
+use App\Enums\ItemStatus;
+use App\Models\Basket;
+use App\Models\Item;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
-it('returns a successful response', function () {
-    $response = $this->get('/');
-
-    $response->assertStatus(200);
-});
 
 it('returns return items for an existing basket', function () {
     createAuthedUserWithFullBasket();
 
     $response = $this->json('GET', route('basket.get'));
 
-    $response->assertStatus(200);
+    $response->assertOk();
 });
 
-it('adds an item to the authenticated user basket', function () {
-    createAuthedUserWithFullBasket();
+it('adds an item to the user basket', function () {
+    $user = User::first();
+    Basket::factory()->create(['user_id' => $user->id]);
     $product = Product::first();
 
-    // Act
-    $response = postJson('/items', [
-        'product_id' => $product->id,
+    $response = $this
+        ->actingAs($user)
+        ->json('POST', route('basket.items.add'), [
+            'product_id' => $product->id,
+        ]);
+
+    $response
+        ->assertJson(fn (AssertableJson $json) =>
+            $json->has('data', fn ($json) =>
+                $json
+                    ->where('status', ItemStatus::ADDED->value)
+                    ->hasAll(['id', 'basket_id', 'status', 'quantity', 'added', 'product'])
+            ));
+
+    expect(Item::count())->toBe(1)
+        ->and(Item::first())->product_id->toBe($product->id);
+});
+
+it('checks out the basket and updates all item statuses to purchased', function () {
+    $user = User::factory()->create();
+    $product1 = Product::first();
+    $product2 = Product::find(2);
+
+    $basket = Basket::factory()
+        ->for($user)
+        ->create();
+
+    $item1 = $basket->items()->create([
+        'product_id' => $product1->id,
+        'status' => ItemStatus::ADDED->value,
     ]);
 
-    // Assert
-    $response->assertCreated();
+    $item2 = $basket->items()->create([
+        'product_id' => $product2->id,
+        'status' => ItemStatus::ADDED->value,
+    ]);
 
-    $response->assertJson(fn (AssertableJson $json) =>
-    $json->where('product_id', $product->id)
-        ->where('status', 'ADDED')
-        ->hasAll(['id', 'basket_id', 'product_id', 'status', 'created_at', 'updated_at'])
+    $response = $this
+        ->actingAs($user)
+        ->postJson(route('basket.checkout'));
+
+    $response->assertOk();
+    $response->assertJsonFragment([
+        'message' => "Checkout successful for basket {$basket->id}",
+    ]);
+
+    $this->assertSame(
+        ItemStatus::PURCHASED->value,
+        $item1->fresh()->status
     );
 
-    expect(Item::count())->toBe(1);
-    expect(Item::first())->product_id->toBe($product->id);
+    $this->assertSame(
+        ItemStatus::PURCHASED->value,
+        $item2->fresh()->status
+    );
+});
+
+it('removes an item from a user\'s basket', function () {
+    $user = User::factory()->create();
+    $product = Product::first();
+    $basket = Basket::factory()->for($user)->create();
+
+    $item = $basket->items()->create([
+        'product_id' => $product->id,
+        'status' => ItemStatus::ADDED->value,
+    ]);
+
+    $response = $this
+        ->actingAs($user)
+        ->json('DELETE', route('basket.items.remove', ['item_id' => $item->id]), ['item_id' => $item->id]);
+
+    $response->assertOk();
+
+    $response->assertJsonPath('data.status', ItemStatus::REMOVED->value);
+    $response->assertJsonPath('data.product.id', $product->id);
+
+    expect($item->fresh()->status)->toBe(ItemStatus::REMOVED->value);
 });

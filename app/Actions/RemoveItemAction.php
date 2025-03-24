@@ -14,13 +14,14 @@ class RemoveItemAction
         $basket = auth()->user()->currentBasket();
 
         $item = $basket->items()
-            ->where('product_id', $data['product_id'])
+            ->find($data['item_id'])
             ->where('status', ItemStatus::ADDED->value)
             ->first();
 
         if ($item) {
             $item->update([
                 'status' => ItemStatus::REMOVED->value,
+                'quantity' => 0,
             ]);
         }
 

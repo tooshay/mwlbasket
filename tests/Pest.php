@@ -67,7 +67,7 @@ function createAuthedUser(): void
 
 function createAuthedUserWithFullBasket(): void
 {
-    $user = User::factory()->create();
+    $user = User::first();
 
     Basket::factory()->create(['user_id' => $user->id]);
 

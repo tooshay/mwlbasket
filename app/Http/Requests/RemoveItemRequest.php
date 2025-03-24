@@ -7,11 +7,11 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ManipulateItemRequest extends FormRequest
+class RemoveItemRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,9 +22,9 @@ class ManipulateItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => [
+            'item_id' => [
                 'required',
-                'exists:products,id',
+                'exists:items,id',
             ],
         ];
     }
