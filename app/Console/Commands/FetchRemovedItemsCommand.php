@@ -7,36 +7,37 @@ namespace App\Console\Commands;
 use App\Repositories\ItemsRepository;
 use Illuminate\Console\Command;
 
-class FetchRemovedItems extends Command
+class FetchRemovedItemsCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:fetch-removed-items';
+    protected $signature = 'app:fetch-removed-items {days=7}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Reports on removed basket items.';
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $itemsRepo = app(ItemsRepository::class);
 
-        $since = now()->subDays($this->option('days'));
+        $since = now()->subDays((int) $this->argument('days'));
 
-        $items = $itemsRepo->getRemovedItems($since);
+        $items = $itemsRepo->findRemoved($since);
 
         $this->table(
-            ['Product', 'User Email', 'Removed At'],
+            ['Product ID', 'Name', 'User email', 'Removed at'],
             $items->map(fn ($item) => [
+                $item->product->id,
                 $item->product->name,
                 $item->basket->user->email,
                 $item->updated_at->toDateTimeString(),

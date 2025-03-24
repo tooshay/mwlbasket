@@ -129,4 +129,4 @@ it('returns only removed items', function () {
             ->etc()
         )
     );
-})->only();
+});

@@ -17,7 +17,7 @@ class ItemsRepository
         return $item->ofBasket($basket)->all();
     }
 
-    public function findRemoved(): Collection
+    public function findRemoved($since = null): Collection
     {
         $item = app(Item::class);
 

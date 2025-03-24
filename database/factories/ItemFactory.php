@@ -23,7 +23,7 @@ class ItemFactory extends Factory
         return [
             'basket_id' => Basket::factory(),
             'status' => ItemStatus::ADDED->value,
-            'product_id' => Product::factory(),
+            'product_id' => fake()->randomElement(Product::all()->pluck('id')->toArray()),
             'quantity' => $this->faker->numberBetween(1, 10),
         ];
     }
