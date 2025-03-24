@@ -11,5 +11,5 @@ it('returns return items for an existing basket', function () {
 
     $response = $this->json('GET', route('basket.get'));
 
-    dd($response->json());
+    $this->assertEquals(200, $response->status());
 });
