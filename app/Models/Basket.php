@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property int $id
  * @property int $user_id
  * @property int $total_amount
@@ -20,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Item> $items
  * @property-read int|null $items_count
  * @property-read \App\Models\User $user
+ *
  * @method static \Database\Factories\BasketFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Basket newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Basket newQuery()
@@ -29,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Basket whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Basket whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Basket whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Basket extends Model

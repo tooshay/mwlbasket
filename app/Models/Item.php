@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- *
- *
  * @property int $id
  * @property int $basket_id
  * @property int $product_id
@@ -24,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Basket $basket
  * @property-read Product $product
+ *
  * @method static \Database\Factories\ItemFactory factory($count = null, $state = [])
  * @method static Builder<static>|Item newModelQuery()
  * @method static Builder<static>|Item newQuery()
@@ -38,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Item whereQuantity($value)
  * @method static Builder<static>|Item whereStatus($value)
  * @method static Builder<static>|Item whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Item extends Model
@@ -48,7 +48,7 @@ class Item extends Model
         'product_id',
         'price',
         'status',
-        'quantity'
+        'quantity',
     ];
 
     public function basket(): BelongsTo

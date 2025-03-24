@@ -27,12 +27,10 @@ it('adds an item to the user basket', function () {
         ]);
 
     $response
-        ->assertJson(fn (AssertableJson $json) =>
-            $json->has('data', fn ($json) =>
-                $json
-                    ->where('status', ItemStatus::ADDED->value)
-                    ->hasAll(['id', 'basket_id', 'status', 'quantity', 'added', 'product'])
-            ));
+        ->assertJson(fn (AssertableJson $json) => $json->has('data', fn ($json) => $json
+            ->where('status', ItemStatus::ADDED->value)
+            ->hasAll(['id', 'basket_id', 'status', 'quantity', 'added', 'product'])
+        ));
 
     expect(Item::count())->toBe(1)
         ->and(Item::first())->product_id->toBe($product->id);
@@ -122,15 +120,13 @@ it('returns only removed items', function () {
 
     $response->assertOk();
 
-    $response->assertJson(fn (AssertableJson $json) =>
-        $json->has('data', 1)
-            ->has('data.0', fn ($json) =>
-            $json
-                ->where('id', $removedItem->id)
-                ->where('status', ItemStatus::REMOVED->value)
-                ->where('product.id', $product1->id)
-                ->where('product.name', $product1->name)
-                ->etc()
-            )
-        );
+    $response->assertJson(fn (AssertableJson $json) => $json->has('data', 1)
+        ->has('data.0', fn ($json) => $json
+            ->where('id', $removedItem->id)
+            ->where('status', ItemStatus::REMOVED->value)
+            ->where('product.id', $product1->id)
+            ->where('product.name', $product1->name)
+            ->etc()
+        )
+    );
 })->only();
