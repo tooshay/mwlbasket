@@ -6,6 +6,7 @@ namespace App\Actions;
 
 use App\Enums\ItemStatus;
 use App\Models\Item;
+use App\Models\Product;
 use App\Repositories\ItemsRepository;
 
 readonly class AddItemAction
@@ -23,11 +24,10 @@ readonly class AddItemAction
             $data['product_id']
         );
 
-        $product = \App\Models\Product::findOrFail($data['product_id']);
-        
+        $product = Product::findOrFail($data['product_id']);
+
         if ($existingItem) {
             $existingItem->increment('quantity');
-            // Update the price based on the new quantity
             $existingItem->price = $product->price * $existingItem->quantity;
             $existingItem->save();
 
