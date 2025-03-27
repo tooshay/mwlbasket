@@ -30,9 +30,7 @@ class FetchRemovedItemsCommand extends Command
     {
         $itemsRepo = app(ItemsRepository::class);
 
-        $since = now()->subDays((int) $this->argument('days'));
-
-        $items = $itemsRepo->findRemoved($since);
+        $items = $itemsRepo->findRemoved($this->argument('days'));
 
         $this->table(
             ['Product ID', 'Name', 'User email', 'Removed at'],

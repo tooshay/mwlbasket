@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\Basket;
 use App\Models\Item;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class ItemsRepository
@@ -17,10 +18,14 @@ class ItemsRepository
         return $item->ofBasket($basket)->all();
     }
 
-    public function findRemoved($since = null): Collection
+    public function findRemoved(?int $daysBack = null): Collection
     {
-        $item = app(Item::class);
+        $query = app(Item::class)->removed();
 
-        return $item->removed()->get();
+        if ($daysBack !== null) {
+            $query->where('updated_at', '>=', Carbon::now()->subDays($daysBack));
+        }
+
+        return $query->get();
     }
 }
