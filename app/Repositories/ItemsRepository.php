@@ -30,6 +30,13 @@ class ItemsRepository
             ->first();
     }
 
+    public function findBasketItemsByStatus(int $basketId, ItemStatus $status): Collection
+    {
+        return Item::where('basket_id', $basketId)
+            ->where('status', $status->value)
+            ->get();
+    }
+    
     public function findRemoved(?int $daysBack = null): Collection
     {
         $query = app(Item::class)->removed();
