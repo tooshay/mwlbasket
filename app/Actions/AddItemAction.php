@@ -23,8 +23,13 @@ readonly class AddItemAction
             $data['product_id']
         );
 
+        $product = \App\Models\Product::findOrFail($data['product_id']);
+        
         if ($existingItem) {
             $existingItem->increment('quantity');
+            // Update the price based on the new quantity
+            $existingItem->price = $product->price * $existingItem->quantity;
+            $existingItem->save();
 
             return $existingItem->fresh();
         }
@@ -33,6 +38,7 @@ readonly class AddItemAction
             'product_id' => $data['product_id'],
             'status' => ItemStatus::ADDED->value,
             'quantity' => 1,
+            'price' => $product->price,
         ]);
 
         $item->basket_id = $basket->id;
