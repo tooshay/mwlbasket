@@ -12,8 +12,7 @@ readonly class AddItemAction
 {
     public function __construct(
         private ItemsRepository $itemsRepository
-    ) {
-    }
+    ) {}
 
     public function execute(array $data): Item
     {
@@ -35,10 +34,10 @@ readonly class AddItemAction
             'status' => ItemStatus::ADDED->value,
             'quantity' => 1,
         ]);
-        
+
         $item->basket_id = $basket->id;
         $item->save();
-        
+
         return $item;
     }
 }

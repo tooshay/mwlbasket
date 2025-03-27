@@ -35,5 +35,4 @@ class RemoveItemRequest extends FormRequest
             'item_id' => $this->route('item_id'),
         ]);
     }
-
 }

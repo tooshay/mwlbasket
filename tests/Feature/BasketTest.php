@@ -27,7 +27,7 @@ it('adds an item to the user basket', function () {
         ]);
 
     $response->assertCreated();
-    
+
     $response
         ->assertJson(fn (AssertableJson $json) => $json
             ->where('status', ItemStatus::ADDED->value)

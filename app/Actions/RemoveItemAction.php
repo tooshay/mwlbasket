@@ -13,8 +13,7 @@ readonly class RemoveItemAction
 {
     public function __construct(
         private ItemsRepository $itemsRepository
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception
@@ -29,7 +28,7 @@ readonly class RemoveItemAction
             ItemStatus::ADDED->value
         );
 
-        if (!$item) {
+        if (! $item) {
             throw new Exception('Item not found or already removed');
         }
 

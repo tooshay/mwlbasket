@@ -10,10 +10,10 @@ use Illuminate\Support\Collection;
 
 class ItemsRepository
 {
-    public function findBasketItem(int $basketId, mixed $itemId, string $status = null): ?Item
+    public function findBasketItem(int $basketId, mixed $itemId, ?string $status = null): ?Item
     {
         $query = Item::where('basket_id', $basketId)
-            ->where('id', (int)$itemId);
+            ->where('id', (int) $itemId);
 
         if ($status !== null) {
             $query->where('status', $status);
@@ -28,7 +28,7 @@ class ItemsRepository
             ->where('product_id', $productId)
             ->first();
     }
-    
+
     public function findRemoved(?int $daysBack = null): Collection
     {
         $query = app(Item::class)->removed();
