@@ -7,7 +7,7 @@ namespace App\Actions;
 use App\Enums\ItemStatus;
 use App\Models\Basket;
 
-class CheckoutAction
+readonly class CheckoutAction
 {
     public function execute(): Basket
     {

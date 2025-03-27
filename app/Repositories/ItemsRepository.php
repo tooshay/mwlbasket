@@ -4,20 +4,31 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Models\Basket;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class ItemsRepository
 {
-    public function findWithBasket(Basket $basket): Collection
+    public function findBasketItem(int $basketId, mixed $itemId, string $status = null): ?Item
     {
-        $item = app(Item::class);
+        $query = Item::where('basket_id', $basketId)
+            ->where('id', (int)$itemId);
 
-        return $item->ofBasket($basket)->all();
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+
+        return $query->first();
     }
 
+    public function findBasketItemByProduct(int $basketId, int $productId): ?Item
+    {
+        return Item::where('basket_id', $basketId)
+            ->where('product_id', $productId)
+            ->first();
+    }
+    
     public function findRemoved(?int $daysBack = null): Collection
     {
         $query = app(Item::class)->removed();

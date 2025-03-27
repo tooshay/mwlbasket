@@ -28,4 +28,12 @@ class RemoveItemRequest extends FormRequest
             ],
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'item_id' => $this->route('item_id'),
+        ]);
+    }
+
 }
