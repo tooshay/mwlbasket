@@ -25,7 +25,7 @@ readonly class RemoveItemAction
         $item = $this->itemsRepository->findBasketItem(
             $basket->id,
             (int) $data['item_id'],
-            ItemStatus::ADDED->value
+            ItemStatus::ADDED
         );
 
         if (! $item) {
