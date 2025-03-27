@@ -15,9 +15,9 @@ readonly class CheckoutAction
         $basket->checked_out_at ??= now();
         $basket->save();
 
-        $basket->items()->update([
-            'status' => ItemStatus::PURCHASED->value,
-        ]);
+        $basket->items()
+            ->where('status', ItemStatus::ADDED->value)
+            ->update(['status' => ItemStatus::PURCHASED->value]);
 
         return $basket;
     }
