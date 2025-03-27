@@ -36,7 +36,7 @@ class Basket extends Model
     use HasFactory;
 
     protected $fillable = ['checked_out_at'];
-    
+
     public $timestamps = true;
 
     public function items(): HasMany

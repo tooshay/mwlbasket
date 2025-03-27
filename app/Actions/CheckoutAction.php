@@ -13,7 +13,7 @@ readonly class CheckoutAction
     public function __construct(
         private ItemsRepository $itemsRepository
     ) {}
-    
+
     public function execute(): Basket
     {
         $basket = auth()->user()->currentBasket();
@@ -22,7 +22,7 @@ readonly class CheckoutAction
 
         // Get added items using repository
         $items = $this->itemsRepository->findBasketItemsByStatus($basket->id, ItemStatus::ADDED);
-        
+
         // Update each item (avoiding update logic in the repository)
         foreach ($items as $item) {
             $item->status = ItemStatus::PURCHASED->value;

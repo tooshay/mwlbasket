@@ -36,7 +36,7 @@ class ItemsRepository
             ->where('status', $status->value)
             ->get();
     }
-    
+
     public function findRemoved(?int $daysBack = null): Collection
     {
         $query = app(Item::class)->removed();
