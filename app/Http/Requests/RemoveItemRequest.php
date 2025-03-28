@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
 class RemoveItemRequest extends FormRequest
 {
@@ -38,12 +38,10 @@ class RemoveItemRequest extends FormRequest
             'item_id' => $this->route('item_id'),
         ]);
     }
-    
+
     /**
      * Handle a failed validation attempt.
      *
-     * @param Validator $validator
-     * @return void
      * @throws HttpResponseException
      */
     protected function failedValidation(Validator $validator): void
