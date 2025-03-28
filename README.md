@@ -54,7 +54,7 @@ The API will be available at `http://localhost:9876`
 ```
 curl -X POST http://localhost:9876/api/login \
   -H "Content-Type: application/json" \
-  -d '{"email": "roy@wmlbasket.com", "password": "password1234"}'
+  -d '{"email": "roy@mwlbasket.com", "password": "password1234"}'
 ```
 
 ### Add item to basket
