@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "9947ffcd-c8a9-4cab-b92a-f770c8c288be",
+		"name": "MWL Basket API",
+		"description": "API collection for the MWL Shopping Basket project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "52311"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:9876",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"auth_token\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"roy@mwlbasket.com\",\n  \"password\": \"password1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				},
+				"description": "Login to get an authentication token"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Current Basket",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/basket",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"basket"
+					]
+				},
+				"description": "Get the current user's basket"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Removed Items",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/basket/removed-items",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"basket",
+						"removed-items"
+					]
+				},
+				"description": "Get items that were removed before checkout"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Item to Basket",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"product_id\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/basket/items",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"basket",
+						"items"
+					]
+				},
+				"description": "Add an item to the basket"
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout Basket",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/basket/checkout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"basket",
+						"checkout"
+					]
+				},
+				"description": "Complete checkout for the current basket"
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Item from Basket",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/basket/items/:item_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"basket",
+						"items",
+						":item_id"
+					],
+					"variable": [
+						{
+							"key": "item_id",
+							"value": "1",
+							"description": "The ID of the item to remove"
+						}
+					]
+				},
+				"description": "Remove an item from the basket"
+			},
+			"response": []
+		}
+	]
+}

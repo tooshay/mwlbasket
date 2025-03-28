@@ -52,6 +52,14 @@ To run specific tests:
 php artisan test --filter=BasketTest
 ```
 
+## Postman Collection
+
+A Postman collection is included for easy API testing:
+
+1. Import the `mwlbasket.postman_collection.json` file into Postman
+2. The collection uses variables for the base URL and authentication token
+3. Run the "Login" request first - it will automatically store your token for subsequent requests
+
 ## API Endpoints
 
 ### Authentication
