@@ -52,6 +52,20 @@ To run specific tests:
 php artisan test --filter=BasketTest
 ```
 
+## Console Commands
+
+### Removed Items Report
+Generate a report of items that were removed from baskets:
+```
+php artisan app:fetch-removed-items
+```
+
+Options:
+- `days` - Number of days to look back (default: 7)
+```
+php artisan app:fetch-removed-items 30
+```
+
 ## Postman Collection
 
 A Postman collection is included for easy API testing:
