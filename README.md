@@ -82,3 +82,29 @@ curl -X GET http://localhost:9876/api/basket/removed-items \
 curl -X POST http://localhost:9876/api/basket/checkout \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
+
+## Future Improvements
+
+Due to time constraints, the following enhancements could be implemented in future iterations:
+
+1. **Enhanced Role/Permission System**
+   - Implement Spatie's Laravel Permission package for more granular access control
+   - Create proper role hierarchy (customers, admins, staff)
+   - Add middleware for role-based route protection
+
+2. **Custom Exception Handling**
+   - Create domain-specific exception classes (e.g., `BasketEmptyException`, `ItemNotInBasketException`)
+   - Implement a consistent exception rendering system for API responses
+   - Add better error logging and reporting
+
+3. **Expanded Test Coverage**
+   - Add more integration tests for failure scenarios
+   - Implement unit tests for repository and action classes
+
+4. **Architectural Improvements**
+   - Introduce Mediator pattern to centralize creation/updating
+   - Consider using DTOs (Data Transfer Objects) for better type safety
+
+5. **API Documentation**
+   - Add OpenAPI/Swagger documentation
+   - Implement API versioning strategy
