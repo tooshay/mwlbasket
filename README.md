@@ -9,6 +9,10 @@ A Laravel-based JSON API for managing shopping baskets with the ability to track
 - Remove items from basket
 - Checkout functionality
 - Track and retrieve removed items
+- Automated CI/CD with GitHub Actions for code quality and testing
+  - Laravel Pint for code style enforcement
+  - Rector for code quality checks
+  - Pest tests with coverage reporting
 
 ## Requirements
 
@@ -35,6 +39,18 @@ A Laravel-based JSON API for managing shopping baskets with the ability to track
    - Generate an application key
 
 The API will be available at `http://localhost:9876`
+
+## Running Tests
+
+Run the test suite using Pest:
+```
+php artisan test
+```
+
+To run specific tests:
+```
+php artisan test --filter=BasketTest
+```
 
 ## API Endpoints
 
