@@ -6,6 +6,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class RemoveItemRequest extends FormRequest
 {
@@ -24,6 +26,7 @@ class RemoveItemRequest extends FormRequest
         return [
             'item_id' => [
                 'required',
+                'numeric',
                 'exists:items,id',
             ],
         ];
@@ -34,5 +37,20 @@ class RemoveItemRequest extends FormRequest
         $this->merge([
             'item_id' => $this->route('item_id'),
         ]);
+    }
+    
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param Validator $validator
+     * @return void
+     * @throws HttpResponseException
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(response()->json([
+            'error' => 'Validation failed',
+            'messages' => $validator->errors(),
+        ], 422));
     }
 }

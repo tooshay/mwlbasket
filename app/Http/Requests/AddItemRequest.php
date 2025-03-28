@@ -6,6 +6,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class AddItemRequest extends FormRequest
 {
@@ -24,8 +26,24 @@ class AddItemRequest extends FormRequest
         return [
             'product_id' => [
                 'required',
+                'numeric',
                 'exists:products,id',
             ],
         ];
+    }
+    
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param Validator $validator
+     * @return void
+     * @throws HttpResponseException
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(response()->json([
+            'error' => 'Validation failed',
+            'messages' => $validator->errors(),
+        ], 422));
     }
 }
