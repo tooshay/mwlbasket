@@ -132,3 +132,37 @@ it('returns only removed items', function () {
         )
     );
 });
+
+it('returns validation errors as JSON when adding invalid item', function () {
+    $user = User::factory()->create();
+    Basket::factory()->create(['user_id' => $user->id]);
+
+    // Send a non-numeric product_id
+    $response = $this
+        ->actingAs($user)
+        ->json('POST', route('basket.items.add'), [
+            'product_id' => 'not-a-number',
+        ]);
+
+    // Should return 422 with validation errors in JSON format
+    $response->assertStatus(422)
+        ->assertJson(fn (AssertableJson $json) => $json
+            ->has('error')
+            ->has('messages.product_id')
+        );
+});
+
+it('returns validation errors as JSON when removing invalid item', function () {
+    $user = User::factory()->create();
+    Basket::factory()->for($user)->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->json('DELETE', route('basket.items.remove', ['item_id' => 'not-a-number']));
+
+    $response->assertStatus(422)
+        ->assertJson(fn (AssertableJson $json) => $json
+            ->has('error')
+            ->has('messages.item_id')
+        );
+});
